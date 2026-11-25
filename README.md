@@ -5,7 +5,7 @@ A serverless, event-driven order processing system built with Microsoft Azure, B
 ## Architecture Overview
 
 <p align="center">
-  <img src="./Diagram.png" alt="NexaStore Serverless Architecture" width="900"/>
+  <img src="./Architecture/Diagram.png" alt="NexaStore Serverless Architecture" width="900"/>
 </p>
 
 NexaStore uses an event-driven architecture to process customer orders asynchronously and trigger notification workflows.
