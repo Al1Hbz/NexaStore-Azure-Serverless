@@ -42,11 +42,11 @@ NexaStore uses an event-driven architecture to process customer orders asynchron
 
 ## Repository Structure
 
-- `bicep/` – Azure infrastructure deployment templates.
-- `scripts/` – PowerShell scripts for provisioning and configuring Azure resources.
-- `functions/` – Azure Functions and application source code (ProcessOrder, OutboxPublisher, and OrderSender).
-- `architecture/` – Application architecture diagrams.
-- `docs/` – Additional project documentation.
+- `Bicep/` – Azure infrastructure deployment templates.
+- `Scripts/` – PowerShell scripts for provisioning and configuring Azure resources.
+- `Functions/` – Azure Functions and application source code (ProcessOrder, OutboxPublisher, and OrderSender).
+- `Architecture/` – Application architecture diagrams.
+- `Docs/` – Additional project documentation.
 
 ## Deployment
 
