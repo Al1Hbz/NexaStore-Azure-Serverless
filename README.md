@@ -92,6 +92,18 @@ Review the variables and prerequisites in each script before execution.
 - **Serverless Architecture:** Azure Functions provide event-driven execution without requiring dedicated application server management.
 - **Dead-Letter Handling:** Uses the built-in Service Bus Dead-Letter Subqueue to isolate messages that cannot be successfully processed.
 
+## Tested Scenarios & Verification
+
+End-to-end and failure-handling scenarios were validated using SQL queries, Application Insights KQL logs, Azure Service Bus metrics, and Gmail notifications. Test evidence is organized under `docs/test-results/`.
+
+| Test Case | Scenario | Expected Behavior | Verification Evidence |
+|---|---|---|---|
+| **TC-01** | **End-to-End Order Processing (Happy Path)** | Order is processed, inventory is updated, event is recorded in `OutboxEvents` (`Attempts = 1`, `LastError = NULL`), published to Event Grid, and triggers a confirmation email via Logic Apps. | SQL `OutboxEvents` query, Logic App Run History, and Gmail Sent/Inbox confirmation. |
+| **TC-02** | **Idempotency / Duplicate Order** | Re-submitting an existing `OrderId` is detected as `ALREADY_PROCESSED`, preventing duplicate inventory deduction or duplicate event generation. | Application Insights trace logs confirming duplicate detection without inventory changes. |
+| **TC-03** | **Insufficient Stock Handling** | Orders exceeding available product inventory are rejected with `INSUFFICIENT_STOCK` without corrupting inventory state. | Application Insights trace logs showing rejected order status. |
+| **TC-04** | **Event Grid Publish Failure & Outbox Retry** | Simulated publishing failures (`TEST_FAILURE`) are logged while events remain safely stored in the SQL Outbox table and are successfully published on subsequent timer runs. | Application Insights exception/trace logs showing initial `TEST_FAILURE` followed by successful recovery publish. |
+| **TC-05** | **Dead-Letter Queue (DLQ) Isolation** | Malformed or unprocessable messages are isolated into the Service Bus Dead-Letter subqueue instead of blocking `orders-queue`. | Service Bus Queue overview showing messages routed to the Dead-Letter subqueue. |
+
 ## Security & Networking Considerations
 
 The current implementation uses application configuration settings and secrets for service connectivity. Azure Key Vault is provisioned for secure secret management.
